@@ -9,21 +9,17 @@ from blog.models import Post
 faker = FakerFactory.create()
 
 
-class UserFacrtoy:
-    cls = None
-
-
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
 
-    email = factory.Faker('email')
+    email = factory.Faker('safe_email')
     username = factory.LazyAttribute(lambda x: faker.name())
 
     @classmethod
     def _prepare(cls, create, **kwargs):
         password = kwargs.pop('password', None)
-        user = super(UserFacrtoy. cls), cls._prepare(create, **kwargs)
+        user = super(UserFactory, cls)._prepare(create, **kwargs)
         if password:
             user.set_password(password)
             if create:
@@ -31,10 +27,10 @@ class UserFactory(factory.django.DjangoModelFactory):
         return user
 
 class PostFactory(factory.django.DjangoModelFactory):
-    tittle = factory.LazyAttribute(lambda x: faker.word())
-    created = factory.LazyAttribute(lambda x: now())
+    class Meta:
+        model = Post
+    title = factory.LazyAttribute(lambda x: faker.sentence())
+    created_on = factory.LazyAttribute(lambda x: now())
     author = factory.SubFactory(UserFactory)
     status = 0
 
-    class Meta:
-        model = Post

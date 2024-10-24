@@ -7,4 +7,4 @@ def test_post_view(client):
     url = reverse('post_view')
     response = client.get(url)
     assert response.status_code == 200
-    assert response.context == b'Hello World'
+    assert response.content == b'Hello world'
